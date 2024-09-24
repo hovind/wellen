@@ -1217,10 +1217,9 @@ mod tests {
                 + std::mem::size_of::<Option<VarIndex>>()   // index
                 + std::mem::size_of::<SignalRef>()          // signal_idx
                 + std::mem::size_of::<Option<EnumTypeId>>() // enum type
-                + std::mem::size_of::<HierarchyStringId>()  // VHDL type name
+                + std::mem::size_of::<Option<HierarchyStringId>>()  // VHDL type name
                 + std::mem::size_of::<Option<ScopeRef>>()   // parent
-                + std::mem::size_of::<HierarchyItemId>()    // next
-                + 2 // padding
+                + std::mem::size_of::<Option<HierarchyItemId>>() // next
         );
         // currently this all comes out to 48 bytes (~= 6x 64-bit pointers)
         assert_eq!(std::mem::size_of::<Var>(), 48);
@@ -1229,17 +1228,17 @@ mod tests {
         assert_eq!(
             std::mem::size_of::<Scope>(),
             std::mem::size_of::<HierarchyStringId>() // name
-                + std::mem::size_of::<HierarchyStringId>() // component name
-                + 1 // tpe
-                + 2 // source info
-                + 2 // source info
-                + std::mem::size_of::<HierarchyItemId>() // child
-                + std::mem::size_of::<ScopeRef>() // parent
-                + std::mem::size_of::<HierarchyItemId>() // next
-                + 1 // padding
+                + std::mem::size_of::<Option<HierarchyStringId>>() // component name
+                + std::mem::size_of::<ScopeType>() // tpe
+                + std::mem::size_of::<Option<SourceLocId>>() // declaration source
+                + std::mem::size_of::<Option<SourceLocId>>() // instance source
+                + std::mem::size_of::<Option<HierarchyItemId>>() // child
+                + std::mem::size_of::<Option<ScopeRef>>() // parent
+                + std::mem::size_of::<Option<HierarchyItemId>>() // next
+                + 3 // padding
         );
         // currently this all comes out to 32 bytes (~= 4x 64-bit pointers)
-        assert_eq!(std::mem::size_of::<Scope>(), 32);
+        assert_eq!(std::mem::size_of::<Scope>(), 36);
 
         // for comparison: one string is 24 bytes for the struct alone (ignoring heap allocation)
         assert_eq!(std::mem::size_of::<String>(), 24);
